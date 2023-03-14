@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+       - ./prometheus:/etc/prometheus
+       - prometheus_data:/prometheus
+    command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
+
+
+  alertmanager:
+    image: prom/alertmanager
+    container_name: alertmanager
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./alertmanager:/etc/alertmanager/config.yml
+    depends_on:
+      - prometheus
+
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+
+
+  nginx-prometheus-exporter:
+    image: nginx/nginx-prometheus-exporter
+    container_name: nginx-prometheus-exporter
+    ports:
+      - "9113:9113"
+    environment:
+      - SCRAPE_URI=http://nginx:80/metrics
+    depends_on:
+      - nginx
+
+volumes:
+  prometheus_data:
