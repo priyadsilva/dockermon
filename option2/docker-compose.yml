@@ -7,8 +7,11 @@ services:
       - "80:80"
       - "443:443"
     restart: always
-    labels:
-      - "com.example.container-name=nginx"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost/" ]
+      interval: 5s
+      timeout: 10s
+      retries: 3
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor
@@ -28,8 +31,6 @@ services:
        - ./prometheus:/etc/prometheus
        - prometheus_data:/prometheus
     command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
-    depends_on:
-      - cadvisor
 
 
   alertmanager:

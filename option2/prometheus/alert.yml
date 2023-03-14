@@ -2,7 +2,7 @@ groups:
   - name: DemoAlerts
     rules:
       - alert: InstanceDown
-        expr: absent(container_memory_usage_bytes{container_name="nginx"})
+        expr: up{job="nginx"} == 0
         for: 1m
         labels:
           severity: low
@@ -10,7 +10,7 @@ groups:
           summary: 'Alert with low severity.'
 
       - alert: InstanceDownCritical
-        expr: absent(container_memory_usage_bytes{container_name="nginx"})
+        expr: up{job="nginx"} == 0
         for: 5m
         labels:
           severity: high
