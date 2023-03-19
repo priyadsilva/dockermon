@@ -14,6 +14,6 @@ You may configure the system in any way you like, you can use additional contain
 
 SOLUTION:
 
-option1 - using nginx-prometheus exporter. 
+option1 is implemented using nginx-prometheus exporter. 
 
-option2 - using cadvisor.
+option2 is implemented using using cadvisor.
